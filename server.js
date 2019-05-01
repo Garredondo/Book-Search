@@ -22,6 +22,18 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // Define API routes here
+app.get("/api/books", {
+  // db.Book.find({})
+  // GET REQUEST TO RETURN ALL SAVED BOOKS
+})
+
+app.post("/api/books", {
+  // POST to save
+})
+
+app.delete("/api/books/:id", {
+  // remove by id
+})
 
 // Send every other request to the React app
 // Define any API routes before this runs
