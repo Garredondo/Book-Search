@@ -2,8 +2,18 @@ const express = require("express");
 const path = require("path");
 const PORT = process.env.PORT || 3001;
 const app = express();
+const logger = require("morgan");
+const mongoose = require("mongoose");
+
+const axios = require("axios");
+// const db = require(".models");
+
+// Connect to the Mongo DB
+mongoose.connect("mongodb://localhost/googlebooks", {useNewUrlParser : true});
+
 
 // Define middleware here
+app.use(logger("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Serve up static assets (usually on heroku)
