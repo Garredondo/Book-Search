@@ -37,7 +37,7 @@ class App extends Component {
               <Input 
                 name="bookSearch"
                 value={this.state.bookSearch}
-                onChange={this.handleInputChange}
+                onChange={this.handleInputChange} 
               />
             </div>
           </div>

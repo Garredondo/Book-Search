@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const PORT = process.env.PORT || 3001;
@@ -5,11 +6,14 @@ const app = express();
 const logger = require("morgan");
 const mongoose = require("mongoose");
 
+
+// console.log(process.env.API_Key);
 const axios = require("axios");
 // const db = require(".models");
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/googlebooks", {useNewUrlParser : true});
+// mongoose.connect("mongodb://localhost/googlebooks", {useNewUrlParser : true});
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/googlebooks");
 
 
 // Define middleware here
