@@ -12,7 +12,6 @@ const axios = require("axios");
 // const db = require(".models");
 
 // Connect to the Mongo DB
-// mongoose.connect("mongodb://localhost/googlebooks", {useNewUrlParser : true});
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/googlebooks");
 
 
@@ -26,18 +25,33 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // Define API routes here ======== 
-app.get("/api/books", {
-  // db.Book.find({})
-  // GET REQUEST TO RETURN ALL SAVED BOOKS
-})
 
-app.post("/api/books", {
-  // POST to save
-})
+// app.get("/api/books", function(req, res) {
+//   db.Book.find({})
+//   .then(function(data){
+//       res.json(data);
+//   })
+//   .catch(function (err){
+//     res.json(err);
+//   });
+// });
 
-app.delete("/api/books/:id", {
-  // remove by id
-})
+// app.post("/api/books", function(req, res) {
+//   db.Book.create(result)
+//   .then(function (data){
+//     console.log(data);
+//   })
+//   .catch(function (err){
+//     console.log(err);
+//   });
+//   res.send("Book saved.");
+// });
+
+// app.delete("/api/books/:id", function(req, res){
+//   db.Book.findOneAndRemove({_id: req.params.id}, function (err){
+//     res.json(err);
+//   });
+// });
 
 // Send every other request to the React app
 // Define any API routes before this runs
