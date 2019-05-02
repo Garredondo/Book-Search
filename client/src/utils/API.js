@@ -1,12 +1,9 @@
 import axios from "axios";
-// require("dotenv").config();
+// require("dotenv").config({path: "./.env"});
 // I tried using process.env.API_Key but that did not work
 export default {
     getBooks: function(query){
-        let newQuery = query.replace(/\s/g, '+');
-        console.log(newQuery);
-        const URL = "https://www.googleapis.com/books/v1/volumes?q=" + newQuery + "&maxResults=5&key=AIzaSyAhJ6gRIFZDvC3q53YDILOxEbOYJ8GxdN4";
-        return axios.get(URL);
+        return axios.get("/api/search/" + query);
     },
 
     getSavedBooks: function() {

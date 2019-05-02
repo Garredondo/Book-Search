@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Title from "./components/Title";
 import Input from "./components/Input";
 import API from "./utils/API";
-import SearchList from "./components/SearchList";
+
 
 class App extends Component {
 
@@ -29,10 +29,16 @@ class App extends Component {
     event.preventDefault();
     API.getBooks(this.state.bookSearch)
       // this commented out code will allow me to see the res.data in the console
-      .then(res => console.log({ books: res.data}))
-      .then(res => this.setState({ books: res.data.books.items.volumeInfo, title: "", author: "", description: "", image: "", link: ""}),
-      console.log(this.state.books)
-      )
+      .then(res => {
+        console.log(res.data);
+        this.setState({ 
+          title: res.data.items[0].volumeInfo.title,
+          author: res.data.items[0].volumeInfo.authors[0],
+          description: res.data.items[0].volumeInfo.description,
+          image: res.data.items[0].volumeInfo.imageLinks.smallThumbnail,
+          link: res.data.items[0].volumeInfo.previewLink
+        }, () => console.log(this.state));
+      })
       .catch(err => console.log(err));
   }
 
@@ -44,8 +50,8 @@ class App extends Component {
 
   deleteBook = id => {
     API.deleteBook(id)
-    .then(res => this.loadSavedBooks())
-    .catch(err => console.log(err));
+      .then(res => this.loadSavedBooks())
+      .catch(err => console.log(err));
   };
 
 
@@ -75,15 +81,14 @@ class App extends Component {
         <div className="row">
           <div className="col-sm-8">
             <h3>Results</h3>
-            {/* {this.state.books.length ? ( */}
-              <SearchList>
-                {this.state.books.map(book => book)}
-                <p>This is where I want all the books to show</p>
-              </SearchList>
-            {/* ) : (
-              <h3>Sorry, No Results Found.</h3>
-            )} */}
 
+            <div>
+              <h1>{this.state.title}</h1>
+              <h5>About:</h5>
+              <p>{this.state.description}</p>
+              <img src={this.state.image} alt={this.state.title}/>
+              <a href={this.state.link} target="_blank" rel="noopener noreferrer">Visit Google Books</a>
+            </div>
           </div>
 
           <div className="col-sm-4">

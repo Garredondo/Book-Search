@@ -26,6 +26,29 @@ if (process.env.NODE_ENV === "production") {
 
 // Define API routes here ======== 
 
+app.get("/api/search/:title", function (req, res){
+  // console.log("this is the query: " + req.params.query);
+  // let newQuery = query.replace(/\s/g, '+');
+  // console.log(newQuery);
+  let query = req.params.title
+  axios.get("https://www.googleapis.com/books/v1/volumes?q=" + query + "&maxResults=5&key=" + process.env.API_Key)
+  .then(function(response){
+    console.log(response.data);
+    res.json(response.data);
+  })
+  .catch(function(err){
+    console.log(err)
+  });
+});
+
+
+
+
+
+
+      
+
+
 // app.get("/api/books", function(req, res) {
 //   db.Book.find({})
 //   .then(function(data){
