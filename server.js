@@ -57,8 +57,8 @@ app.post("/api/books", function(req, res) {
   res.send("Book saved.");
 });
 
-app.delete("/api/books/:id", function(req, res){
-  db.Book.findOneAndRemove({_id: req.params.id}, function (err){
+app.delete("/api/books/:id?", function(req, res){
+  db.findOneAndRemove({_id: req.params.id}, function (err){
     res.json(err);
   });
 });

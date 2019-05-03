@@ -13,7 +13,7 @@ const styles = {
   container: {
     padding: 10
   },
-  savButton: {
+  delButton: {
     padding: 10
   }
 }
@@ -74,8 +74,8 @@ class App extends Component {
   }
 
   deleteBook = id => {
-    console.log(id);
-    API.deleteBook(id)
+    let delThis = id._id;
+    API.deleteBook(delThis)
       .then(res => this.loadSavedBooks())
       .catch(err => console.log(err));
   };
@@ -135,6 +135,7 @@ class App extends Component {
                 <div>
                   <SavedResults
                     key={SavedBook._id}
+                    id={SavedBook._id}
                     title={SavedBook.title}
                     authors={SavedBook.authors[0]}
                     description={SavedBook.description}
@@ -142,8 +143,8 @@ class App extends Component {
                     link={SavedBook.link}
                   />
                   <button className="btn btn-danger" 
-                  style={styles.savButton} 
-                  onClick={()=>{this.deleteBook(SavedBook.key)}} 
+                  style={styles.delButton} 
+                  onClick={()=>{this.deleteBook(SavedBook)}} 
                   >Delete</button> 
                 </div>
               )
