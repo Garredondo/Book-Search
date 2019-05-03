@@ -27,13 +27,9 @@ if (process.env.NODE_ENV === "production") {
 // Define API routes here ======== 
 
 app.get("/api/search/:title", function (req, res){
-  // console.log("this is the query: " + req.params.query);
-  // let newQuery = query.replace(/\s/g, '+');
-  // console.log(newQuery);
   let query = req.params.title
   axios.get("https://www.googleapis.com/books/v1/volumes?q=" + query + "&maxResults=5&key=" + process.env.API_Key)
   .then(function(response){
-    console.log(response.data);
     res.json(response.data);
   })
   .catch(function(err){
@@ -59,16 +55,16 @@ app.get("/api/search/:title", function (req, res){
 //   });
 // });
 
-// app.post("/api/books", function(req, res) {
-//   db.Book.create(result)
-//   .then(function (data){
-//     console.log(data);
-//   })
-//   .catch(function (err){
-//     console.log(err);
-//   });
-//   res.send("Book saved.");
-// });
+app.post("/api/books", function(req, res) {
+  db.Book.create(result)
+  .then(function (data){
+    console.log(data);
+  })
+  .catch(function (err){
+    console.log(err);
+  });
+  res.send("Book saved.");
+});
 
 // app.delete("/api/books/:id", function(req, res){
 //   db.Book.findOneAndRemove({_id: req.params.id}, function (err){

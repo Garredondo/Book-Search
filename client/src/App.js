@@ -1,9 +1,18 @@
 import React, { Component } from 'react';
-// import { BrowserRouter as Router, Route } from "react-router-dom";
 import Title from "./components/Title";
 import Input from "./components/Input";
 import API from "./utils/API";
+import SearchResult from "./components/SearchResult";
 
+
+const styles = {
+  button: {
+    marginBottom: 15
+  },
+  container: {
+    padding: 10
+  }
+}
 
 class App extends Component {
 
@@ -17,6 +26,20 @@ class App extends Component {
     link: ""
   };
 
+  componentDidMount() {
+    this.searchBooks("The Secret History");
+  }
+
+  searchBooks = query => {
+    API.getBooks(query)
+      .then(res => {
+        this.setState({
+          books: res.data.items
+        }, () => console.log(this.state));
+      })
+      .catch(err => console.log(err));
+  }
+
   handleInputChange = event => {
     let value = event.target.value;
     const name = event.target.name;
@@ -27,20 +50,14 @@ class App extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    API.getBooks(this.state.bookSearch)
-      // this commented out code will allow me to see the res.data in the console
-      .then(res => {
-        console.log(res.data);
-        this.setState({ 
-          title: res.data.items[0].volumeInfo.title,
-          author: res.data.items[0].volumeInfo.authors[0],
-          description: res.data.items[0].volumeInfo.description,
-          image: res.data.items[0].volumeInfo.imageLinks.smallThumbnail,
-          link: res.data.items[0].volumeInfo.previewLink
-        }, () => console.log(this.state));
-      })
-      .catch(err => console.log(err));
+    this.searchBooks(this.state.bookSearch);
   }
+
+  handleSave(){
+    API.saveBook()
+    .then(res => this.loadSavedBooks())
+    .catch(err => console.log(err));
+  };
 
   // loadSavedBooks = () => {
   //   API.getSavedBooks()
@@ -48,17 +65,17 @@ class App extends Component {
   //     this.setState({books: res.data}))
   // }
 
-  deleteBook = id => {
-    API.deleteBook(id)
-      .then(res => this.loadSavedBooks())
-      .catch(err => console.log(err));
-  };
+  // deleteBook = id => {
+  //   API.deleteBook(id)
+  //     .then(res => this.loadSavedBooks())
+  //     .catch(err => console.log(err));
+  // };
 
 
   render() {
     return (
-      // <Router>
-      <div>
+
+      <div style={styles.container}>
         <Title />
         <div className="row">
           <div className="col-sm-12">
@@ -73,6 +90,7 @@ class App extends Component {
           <div className="col-sm-12">
             <button className="btn btn-primary"
               onClick={this.handleFormSubmit}
+              style={styles.button}
             >Search Books</button>
           </div>
         </div>
@@ -80,15 +98,23 @@ class App extends Component {
 
         <div className="row">
           <div className="col-sm-8">
-            <h3>Results</h3>
-
-            <div>
-              <h1>{this.state.title}</h1>
-              <h5>About:</h5>
-              <p>{this.state.description}</p>
-              <img src={this.state.image} alt={this.state.title}/>
-              <a href={this.state.link} target="_blank" rel="noopener noreferrer">Visit Google Books</a>
-            </div>
+            <h3>Search Results</h3>
+            {this.state.books.map(book => {
+              return (
+                <div>
+                  <SearchResult
+                    key={this.state._id}
+                    title={book.volumeInfo.title}
+                    authors={book.volumeInfo.authors}
+                    description={book.volumeInfo.description}
+                    image={book.volumeInfo.imageLinks.smallThumbnail}
+                    link={book.volumeInfo.previewLink}
+                  />
+                  <button className="btn btn-danger" 
+                  style={styles.button} onClick={this.handleSave}>Save</button> 
+                </div>
+              )
+            })}
           </div>
 
           <div className="col-sm-4">
@@ -99,7 +125,7 @@ class App extends Component {
 
 
       </div>
-      // </Router>
+
     );
   }
 
