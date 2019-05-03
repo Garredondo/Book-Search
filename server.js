@@ -5,11 +5,9 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const logger = require("morgan");
 const mongoose = require("mongoose");
-
-
-// console.log(process.env.API_Key);
 const axios = require("axios");
-// const db = require(".models");
+
+var db = require("./models/Book");
 
 // Connect to the Mongo DB
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/googlebooks");
@@ -38,25 +36,18 @@ app.get("/api/search/:title", function (req, res){
 });
 
 
-
-
-
-
-      
-
-
-// app.get("/api/books", function(req, res) {
-//   db.Book.find({})
-//   .then(function(data){
-//       res.json(data);
-//   })
-//   .catch(function (err){
-//     res.json(err);
-//   });
-// });
+app.get("/api/books/saved", function(req, res) {
+  db.find({})
+  .then(function(dbBooks){
+      res.json(dbBooks);
+  })
+  .catch(function (err){
+    res.json(err);
+  });
+});
 
 app.post("/api/books", function(req, res) {
-  db.Book.create(result)
+  db.create(req.body)
   .then(function (data){
     console.log(data);
   })
@@ -66,11 +57,11 @@ app.post("/api/books", function(req, res) {
   res.send("Book saved.");
 });
 
-// app.delete("/api/books/:id", function(req, res){
-//   db.Book.findOneAndRemove({_id: req.params.id}, function (err){
-//     res.json(err);
-//   });
-// });
+app.delete("/api/books/:id", function(req, res){
+  db.Book.findOneAndRemove({_id: req.params.id}, function (err){
+    res.json(err);
+  });
+});
 
 // Send every other request to the React app
 // Define any API routes before this runs

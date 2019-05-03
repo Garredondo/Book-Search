@@ -3,6 +3,7 @@ import Title from "./components/Title";
 import Input from "./components/Input";
 import API from "./utils/API";
 import SearchResult from "./components/SearchResult";
+import SavedResults from "./components/SavedResults";
 
 
 const styles = {
@@ -10,6 +11,9 @@ const styles = {
     marginBottom: 15
   },
   container: {
+    padding: 10
+  },
+  savButton: {
     padding: 10
   }
 }
@@ -19,15 +23,12 @@ class App extends Component {
   state = {
     books: [],
     bookSearch: "",
-    title: "",
-    authors: [],
-    description: "",
-    image: "",
-    link: ""
+    SavedBooks: []
   };
 
   componentDidMount() {
     this.searchBooks("The Secret History");
+    this.loadSavedBooks();
   }
 
   searchBooks = query => {
@@ -35,7 +36,7 @@ class App extends Component {
       .then(res => {
         this.setState({
           books: res.data.items
-        }, () => console.log(this.state));
+        });
       })
       .catch(err => console.log(err));
   }
@@ -53,23 +54,31 @@ class App extends Component {
     this.searchBooks(this.state.bookSearch);
   }
 
-  handleSave(){
-    API.saveBook()
+  handleSave = book => {
+    const savedBook = {
+      title: book.volumeInfo.title,
+      authors: book.volumeInfo.authors,
+      description: book.volumeInfo.description,
+      image: book.volumeInfo.imageLinks.smallThumbnail,
+      link: book.volumeInfo.previewLink
+    };
+    API.saveBook(savedBook)
     .then(res => this.loadSavedBooks())
     .catch(err => console.log(err));
   };
 
-  // loadSavedBooks = () => {
-  //   API.getSavedBooks()
-  //   .then(res => 
-  //     this.setState({books: res.data}))
-  // }
+  loadSavedBooks = () => {
+    API.getSavedBooks()
+    .then(res => 
+      this.setState({SavedBooks: res.data}))
+  }
 
-  // deleteBook = id => {
-  //   API.deleteBook(id)
-  //     .then(res => this.loadSavedBooks())
-  //     .catch(err => console.log(err));
-  // };
+  deleteBook = id => {
+    console.log(id);
+    API.deleteBook(id)
+      .then(res => this.loadSavedBooks())
+      .catch(err => console.log(err));
+  };
 
 
   render() {
@@ -111,7 +120,9 @@ class App extends Component {
                     link={book.volumeInfo.previewLink}
                   />
                   <button className="btn btn-danger" 
-                  style={styles.button} onClick={this.handleSave}>Save</button> 
+                  style={styles.button} 
+                  onClick={()=>{this.handleSave(book)}} 
+                  >Save</button> 
                 </div>
               )
             })}
@@ -119,7 +130,25 @@ class App extends Component {
 
           <div className="col-sm-4">
             <h3>Saved Books</h3>
-            <p>This is where I want all the saved books to show</p>
+            {this.state.SavedBooks.map(SavedBook => {
+              return (
+                <div>
+                  <SavedResults
+                    key={SavedBook._id}
+                    title={SavedBook.title}
+                    authors={SavedBook.authors[0]}
+                    description={SavedBook.description}
+                    image={SavedBook.image}
+                    link={SavedBook.link}
+                  />
+                  <button className="btn btn-danger" 
+                  style={styles.savButton} 
+                  onClick={()=>{this.deleteBook(SavedBook.key)}} 
+                  >Delete</button> 
+                </div>
+              )
+            })}
+           
           </div>
         </div>
 
