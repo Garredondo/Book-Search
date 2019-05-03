@@ -13,8 +13,10 @@ const styles = {
   container: {
     padding: 10
   },
-  delButton: {
-    padding: 10
+  searchButton: {
+    backgroundColor: "#34a852",
+    marginBottom: 15,
+    color: "white"
   }
 }
 
@@ -52,6 +54,11 @@ class App extends Component {
   handleFormSubmit = event => {
     event.preventDefault();
     this.searchBooks(this.state.bookSearch);
+
+
+    this.setState({
+      bookSearch: ""
+    });
   }
 
   handleSave = book => {
@@ -97,9 +104,9 @@ class App extends Component {
         </div>
         <div className="row">
           <div className="col-sm-12">
-            <button className="btn btn-primary"
+            <button className="btn"
               onClick={this.handleFormSubmit}
-              style={styles.button}
+              style={styles.searchButton}
             >Search Books</button>
           </div>
         </div>
@@ -143,9 +150,8 @@ class App extends Component {
                     link={SavedBook.link}
                   />
                   <button className="btn btn-danger" 
-                  style={styles.delButton} 
                   onClick={()=>{this.deleteBook(SavedBook)}} 
-                  >Delete</button> 
+                  ><i class="fas fa-trash-alt"></i></button> 
                 </div>
               )
             })}

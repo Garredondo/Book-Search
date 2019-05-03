@@ -9,7 +9,7 @@ const styles = {
 function Input(props) {
     return (
         <div className="input-group input-group-sm" style={styles.bar}>
-            <input className="form-control" type="text" {...props} placeholder="Search For a Book"/>
+            <input className="form-control" type="text" {...props} placeholder="Search for a Book"/>
         </div>
     )
 }
