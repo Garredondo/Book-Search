@@ -13,7 +13,7 @@ The following were used to create this site:
 
 ## The Site
 
-(./assets/screenshot.png)
+(/assets/screenshot.png)
 
 ## Visit
 
